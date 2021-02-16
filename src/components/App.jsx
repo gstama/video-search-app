@@ -7,6 +7,11 @@ import youtube from '../api/youtube';
 class App extends React.Component {
   state = { videos: [], selectedVideo: null };
 
+  componentDidMount() {
+    // default search term for initial render
+    this.onTermSubmit('dogs');
+  }
+
   onTermSubmit = async (term) => {
     const response = await youtube.get('/search', {
       params: {
@@ -17,7 +22,10 @@ class App extends React.Component {
         key: process.env.REACT_APP_GOOGLE_API_KEY,
       },
     });
-    this.setState({ videos: response.data.items });
+    this.setState({
+      videos: response.data.items,
+      selectedVideo: response.data.items[0],
+    });
   };
 
   onVideoSelect = (video) => {
